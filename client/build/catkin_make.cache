@@ -1,0 +1,2 @@
+test_client
+-DCATKIN_DEVEL_PREFIX=/home/chonny/cloud-robotics/client/devel -DCMAKE_INSTALL_PREFIX=/home/chonny/cloud-robotics/client/install -G Unix Makefiles

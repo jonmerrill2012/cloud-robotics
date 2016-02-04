@@ -15,7 +15,7 @@ commands = {
         }
 }
 #our server url and turtle id
-url = 'http://192.168.1.139:3000'
+url = 'http://localhost:3000'
 tid = 1
 
 # register the turtle with the server
@@ -35,7 +35,7 @@ while True:
         commands['angular']['z'] = 2
 
     # send the command to the server
-    r = requests.post(url + '/command', json = {'id': tid, 'rosData': commands})
+    r = requests.post(url + '/command', json = {'id': tid, 'commands': commands})
     # parse and print the json response
     data = json.loads(r.text)
     print data

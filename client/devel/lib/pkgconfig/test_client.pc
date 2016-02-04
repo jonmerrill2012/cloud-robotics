@@ -1,0 +1,8 @@
+prefix=/home/chonny/cloud-robotics/client/devel
+
+Name: test_client
+Description: Description of test_client
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/chonny/cloud-robotics/client/devel/lib 
+Requires: 
