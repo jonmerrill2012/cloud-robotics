@@ -1,7 +1,0 @@
-set(_CATKIN_CURRENT_PACKAGE "test_client")
-set(test_client_MAINTAINER "chonny <chonny@todo.todo>")
-set(test_client_DEPRECATED "")
-set(test_client_VERSION "0.0.0")
-set(test_client_BUILD_DEPENDS "roscpp" "std_msgs")
-set(test_client_RUN_DEPENDS "roscpp" "std_msgs")
-set(test_client_BUILDTOOL_DEPENDS "catkin")
