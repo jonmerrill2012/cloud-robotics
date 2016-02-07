@@ -73,7 +73,6 @@ app.post('/', function root (req, res) {
     // get the id from the robot
     var id = req.body.id;
     if (id in states) {
-        console.log('here');
         var err = 'Duplicate ID';
     }
 
@@ -91,7 +90,7 @@ app.post('/', function root (req, res) {
 app.post('/command', function command (req, res) {
     // get id and commands from robot
     var id = req.body.id;
-    var data = req.body.commands;
+    var data = JSON.parse(req.body.commands);
 
     // In case server goes down, we can reconnect a robot without robot knowing
     if (!(id in states)) {
