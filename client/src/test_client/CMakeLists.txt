@@ -6,7 +6,7 @@ project(test_client)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
-  genmsg
+  message_generation
 )
 
 
@@ -99,10 +99,7 @@ generate_messages(
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES test_client
-#  CATKIN_DEPENDS roscpp std_msgs
-#  DEPENDS system_lib
+    CATKIN_DEPENDS message_runtime
 )
 
 ###########
@@ -124,7 +121,7 @@ include_directories(
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
 ## either from message generation or dynamic reconfigure
-# add_dependencies(test_client ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+#add_dependencies(input test_client_generate_messages_cpp)
 
 ## Declare a C++ executable
 add_executable(turtle src/test_client.cpp)
@@ -133,6 +130,8 @@ add_executable(input src/input.cpp)
 
 ## Add cmake target dependencies of the executable
 ## same as for the library above
+add_dependencies(input test_client_generate_messages_cpp)
+add_dependencies(turtle test_client_generate_messages_cpp)
 #add_dependencies(turtle ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
