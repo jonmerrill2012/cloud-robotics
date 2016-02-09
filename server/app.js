@@ -57,10 +57,18 @@ function connect_robot(id) {
         messageType : 'geometry_msgs/Twist'
     });
 
+    // create the teleport service client
+    var teleportService = new ROSLIB.Service({
+        ros: ros,
+        name: 'turtle' + id + '/teleport_absolute',
+        serviceType: 'turtlesim/TeleportAbsolute'
+    });
+
     // update the state for the robot
     states[id] = {
         state: {},
         talker: talker,
+        teleportService: teleportService,
         last_connect: Date.now(),
         process: turtle
     }
@@ -90,6 +98,7 @@ app.post('/', function root (req, res) {
 app.post('/command', function command (req, res) {
     // get id and commands from robot
     var id = req.body.id;
+    var state = JSON.parse(req.body.state);
     var data = JSON.parse(req.body.commands);
 
     // In case server goes down, we can reconnect a robot without robot knowing
@@ -98,53 +107,64 @@ app.post('/command', function command (req, res) {
     }
 
     states[id].last_connect = Date.now()
-    // upload state
 
-    // construct a message of the correct type for our "talker" topic using POST data
-    var twist = new ROSLIB.Message({
-        linear : {
-          x : data.linear.x,
-          y : data.linear.y,
-          z : data.linear.z 
-        },
-        angular : {
-          x : data.angular.x,
-          y : data.angular.y, 
-          z : data.angular.z
-        }
+    // upload state and call teleport
+    isTeleportDone = false;
+    states[id].state = state;
+    var request = new ROSLIB.ServiceRequest({
+        x: state.x,
+        y: state.y,
+        theta: state.theta
     });
+    states[id].teleportService.callService(request, function(result){
+        // construct a message of the correct type for our "talker" topic using POST data
+        var twist = new ROSLIB.Message({
+            linear : {
+                x : data.linear.x,
+            y : data.linear.y,
+            z : data.linear.z 
+            },
+            angular : {
+                x : data.angular.x,
+            y : data.angular.y, 
+            z : data.angular.z
+            }
+        });
 
-    // tap in to a ROS topic we can listen Topic
-    // (currently using turtlesim stuff for testing)
-    var listener = new ROSLIB.Topic({
-        ros: ros,
-        name: 'turtle' + id + '/pose',
-        messageType: 'turtlesim/Pose'
-    });
+        // tap in to a ROS topic we can listen Topic
+        // (currently using turtlesim stuff for testing)
+        var listener = new ROSLIB.Topic({
+            ros: ros,
+            name: 'turtle' + id + '/pose',
+            messageType: 'turtlesim/Pose'
+        });
 
-    published = 0;
+        published = 0;
 
-    // subscribe to our topic
-    // enter the contained function when we get a message
-    listener.subscribe(function(message) {
-        // we only want to read the data after we publish and the turtle has stopped
-        if (published === 1 && message.linear_velocity === 0 && message.angular_velocity === 0) {
-            // unsubscribe from the topic so we stop getting messages
-            listener.unsubscribe();
+        // subscribe to our topic
+        // enter the contained function when we get a message
+        listener.subscribe(function(message) {
+            // we only want to read the data after we publish and the turtle has stopped
+            if (published === 1 && message.linear_velocity === 0 && message.angular_velocity === 0) {
+                // unsubscribe from the topic so we stop getting messages
+                listener.unsubscribe();
 
-            // update the robot state
-            states[id].state = message
-            // send the state back to the robot and end the request
-            res.end(JSON.stringify(message));
+                // update the robot state
+                states[id].state = message;
+
+                // send the state back to the robot and end the request
+                resp = String(message.x) + ',' + String(message.y) + ',' + String(message.theta) + ',';
+                res.end(resp);
 
             // now is a good time to check for timeouts
             check_timeouts();
-        }
-    });
+            }
+        });
 
-    // publish our message
-    states[id].talker.publish(twist);
-    published = 1;
+        // publish our message
+        states[id].talker.publish(twist);
+        published = 1;
+    });
 });
 
 // disconnect a robot when it asks to be disconnected
