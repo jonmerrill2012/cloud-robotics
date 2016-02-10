@@ -144,6 +144,12 @@ app.post('/command', function command (req, res) {
         // subscribe to our topic
         // enter the contained function when we get a message
         listener.subscribe(function(message) {
+            // catch early state returns
+            if (message.x.toFixed(6) === state.x.toFixed(6) &&
+                message.theta.toFixed(6) === state.theta.toFixed(6) && 
+                message.y.toFixed(6) === state.y.toFixed(6)){
+                return;
+            }
             // we only want to read the data after we publish and the turtle has stopped
             if (published === 1 && message.linear_velocity === 0 && message.angular_velocity === 0) {
                 // unsubscribe from the topic so we stop getting messages
