@@ -939,7 +939,8 @@ std::string createLaserScanMSG(const sensor_msgs::LaserScanConstPtr& laser_scan)
 
     // header
     std::string seq;
-    //std::string stamp;
+    std::string stampSec;
+    std::string stampNsec;
     std::string frame_id;
     // body
     std::string angle_min;
@@ -950,14 +951,18 @@ std::string createLaserScanMSG(const sensor_msgs::LaserScanConstPtr& laser_scan)
     std::string range_min;
     std::string range_max;
     std::vector<std::string> ranges;
-    //std::vector<std::string> intensities;
+    std::vector<std::string> intensities;
 
     // Header
     sprintf(cmd, "%u", laser_scan->header.seq);
     seq = cmd;
-    //sprintf(cmd, "%u", (uint32_t)laser_scan->header.stamp);
-    //stamp = cmd;
-    //sprintf(cmd, "%s", laser_scan->header.frame_id);
+
+    sprintf(cmd, "%u", laser_scan->header.stamp.sec);
+    stampSec = cmd;
+
+    sprintf(cmd, "%u", laser_scan->header.stamp.nsec);
+    stampNsec = cmd;
+
     frame_id = laser_scan->header.frame_id;
 
     // Body
@@ -981,17 +986,22 @@ std::string createLaserScanMSG(const sensor_msgs::LaserScanConstPtr& laser_scan)
         sprintf(cmd, "%f", laser_scan->ranges[i]);
         ranges.push_back(cmd);
     }
-    
 
     // int intensitiesLen = sizeof(laser_scan->intensities)/sizeof(laser_scan->intensities[0]);
+
     // float x = laser_scan->intensities[0];
-   
+
+
     // for(int i=0; i < intensitiesLen; i++){
     //     sprintf(cmd, "%f", laser_scan->ranges[i]);
     //     intensities.push_back(cmd);
     // }
 
-    stringCmd = "header={\"seq\":" + seq + ", \"stamp\":1, \"frame_id\":\"" + frame_id + "\"}";
+    //header
+    stringCmd = "header={\"seq\":" + seq + ", \"frame_id\":\"" + frame_id + "\", ";
+    stringCmd += "\"stamp\":{\"sec\":" + stampSec + ", \"nsec\":" + stampNsec + "}}";
+
+    //body
     stringCmd += "&angle_min=" + angle_min;
     stringCmd += "&angle_max=" + angle_max;
     stringCmd += "&angle_increment=" + angle_increment;
