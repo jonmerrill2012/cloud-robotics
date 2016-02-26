@@ -193,7 +193,7 @@ app.post('/amcl', function amcl (req, res){
         ranges: JSON.parse(req.body.ranges)
     };
     console.log(laserScan);
-    res.sendStatus(200).end();
+    res.end(JSON.stringify(laserScan));
 })
 
 // connect to ROS
