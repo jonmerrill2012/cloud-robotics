@@ -34,7 +34,7 @@
 // Capstone
 #include <curl/curl.h>
 #include <string>
- #include <unistd.h>
+#include <unistd.h>
 
 #include "map/map.h"
 #include "pf/pf.h"
@@ -107,7 +107,11 @@ angle_diff(double a, double b)
     return(d2);
 }
 
-static const std::string scan_topic_ = "scan";
+////////////////////////////////////////////////////////////
+// static const std::string scan_topic_ = "scan";
+// FIXME: Replace with line above later:
+static const std::string scan_topic_ = "laserScanTEST";
+////////////////////////////////////////////////////////////
 
 class AmclNode
 {
@@ -1405,8 +1409,14 @@ void AmclNode::laserReceivedHelper(const sensor_msgs::LaserScanConstPtr& laser_s
 void
 AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
 {
+  // ros::Time begin = ros::Time::now();
+  
   std::string message = createLaserScanMSG(laser_scan);
   sendData("http://localhost:3000/amcl", message);
+  
+  // ros::Duration execTime = ros::Time::now() - begin;
+  // ROS_ERROR("%f", (execTime.toSec()));
+
   laserReceivedHelper(laser_scan);
 }
 
