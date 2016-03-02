@@ -8,7 +8,7 @@ var exec = require('child_process').exec;
 var app = express();
 
 // allow us to parse json in POST requets
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 
@@ -181,19 +181,8 @@ app.post('/disconnect', function disconnect (req, res) {
 });
 
 app.post('/amcl', function amcl (req, res){
-    console.log(req.body);
-    var laserScan = {
-        header: JSON.parse(req.body.header),
-        angle_min: req.body.angle_min,
-        angle_max: req.body.angle_max,
-        angle_increment: req.body.angle_increment,
-        scan_time: req.body.scan_time,
-        range_max: req.body.range_max,
-        range_min: req.body.range_min,
-        ranges: JSON.parse(req.body.ranges)
-    };
-    console.log(laserScan);
-    res.end(JSON.stringify(laserScan));
+    console.log(req.body.header.seq);
+    res.end(JSON.stringify(req.body));
 })
 
 // connect to ROS

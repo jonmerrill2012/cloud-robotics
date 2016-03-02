@@ -1,11 +1,3 @@
-pass laser scan to laserReceivedHelper from curlCallback
-
-json parsing
-
 amcl on server
 
 state sync
-
-
-research:
-python node for network stuff?
