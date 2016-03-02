@@ -31,11 +31,6 @@
 // Signal handling
 #include <signal.h>
 
-// Capstone
-#include <curl/curl.h>
-#include <string>
-#include <unistd.h>
-
 #include "map/map.h"
 #include "pf/pf.h"
 #include "sensors/amcl_odom.h"
@@ -65,8 +60,6 @@
 // Dynamic_reconfigure
 #include "dynamic_reconfigure/server.h"
 #include "amcl/AMCLConfig.h"
-
-
 
 #define NEW_UNIFORM_SAMPLING 1
 
@@ -107,11 +100,8 @@ angle_diff(double a, double b)
     return(d2);
 }
 
-////////////////////////////////////////////////////////////
 // static const std::string scan_topic_ = "scan";
-// FIXME: Replace with line above later:
 static const std::string scan_topic_ = "laserScanTEST";
-////////////////////////////////////////////////////////////
 
 class AmclNode
 {
@@ -146,9 +136,6 @@ class AmclNode
                         nav_msgs::SetMap::Response& res);
 
     void laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan);
-    // REMOVE ME AFTER TESTING NETWORK STUFF
-    void laserReceivedHelper(const sensor_msgs::LaserScanConstPtr& laser_scan);
-    // ***************
     void initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg);
     void handleInitialPoseMessage(const geometry_msgs::PoseWithCovarianceStamped& msg);
     void mapReceived(const nav_msgs::OccupancyGridConstPtr& msg);
@@ -287,6 +274,7 @@ main(int argc, char** argv)
 
   // Make our node available to sigintHandler
   amcl_node_ptr.reset(new AmclNode());
+
   ros::spin();
 
   // Without this, our boost locks are not shut down nicely
@@ -926,111 +914,9 @@ AmclNode::setMapCallback(nav_msgs::SetMap::Request& req,
   return true;
 }
 
-size_t curlCallback(char *ptr, size_t size, size_t nmemb, void *userdata){
-  ROS_ERROR("%s", ptr);
-  //laserReceivedHelper(laser_scan);
-}
-
-void sendData(std::string url, std::string message){
-  CURL *curl = curl_easy_init();
-
-  curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
-  curl_easy_setopt(curl, CURLOPT_POSTFIELDS, message.c_str());
-  curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, curlCallback);
-
-  curl_easy_perform(curl);
-
-  /* always cleanup */ 
-  curl_easy_cleanup(curl); 
-}
-
-std::string createLaserScanMSG(const sensor_msgs::LaserScanConstPtr& laser_scan){
-  char cmd[10000];
-  std::string stringCmd;
-
-  // header
-  std::string seq;
-  std::string stampSec;
-  std::string stampNsec;
-  std::string frame_id;
-  // body
-  std::string angle_min;
-  std::string angle_max;
-  std::string angle_increment;
-  std::string time_increment;
-  std::string scan_time;
-  std::string range_min;
-  std::string range_max;
-  std::vector<std::string> ranges;
-  std::vector<std::string> intensities;
-
-  // Header
-  sprintf(cmd, "%u", laser_scan->header.seq);
-  seq = cmd;
-
-  sprintf(cmd, "%u", laser_scan->header.stamp.sec);
-  stampSec = cmd;
-
-  sprintf(cmd, "%u", laser_scan->header.stamp.nsec);
-  stampNsec = cmd;
-
-  frame_id = laser_scan->header.frame_id;
-
-  // Body
-  sprintf(cmd, "%f", laser_scan->angle_min);
-  angle_min = cmd;
-  sprintf(cmd, "%f", laser_scan->angle_max);
-  angle_max = cmd;
-  sprintf(cmd, "%f", laser_scan->angle_increment);
-  angle_increment = cmd;
-  sprintf(cmd, "%f", laser_scan->time_increment);
-  time_increment = cmd;
-  sprintf(cmd, "%f", laser_scan->scan_time);
-  scan_time = cmd;
-  sprintf(cmd, "%f", laser_scan->range_min);
-  range_min = cmd;
-  sprintf(cmd, "%f", laser_scan->range_max);
-  range_max = cmd;
-  
-  int rangesLen = sizeof(laser_scan->ranges)/sizeof(laser_scan->ranges[0]);
-  for(int i=0; i < rangesLen; i++){
-    sprintf(cmd, "%f", laser_scan->ranges[i]);
-    ranges.push_back(cmd);
-  }
-
-  // int intensitiesLen = sizeof(laser_scan->intensities)/sizeof(laser_scan->intensities[0]);
-
-  // float x = laser_scan->intensities[0];
-
-
-  // for(int i=0; i < intensitiesLen; i++){
-  //   sprintf(cmd, "%f", laser_scan->ranges[i]);
-  //   intensities.push_back(cmd);
-  // }
-
-  //header
-  stringCmd = "header={\"seq\":" + seq + ", \"frame_id\":\"" + frame_id + "\", ";
-  stringCmd += "\"stamp\":{\"sec\":" + stampSec + ", \"nsec\":" + stampNsec + "}}";
-
-  //body
-  stringCmd += "&angle_min=" + angle_min;
-  stringCmd += "&angle_max=" + angle_max;
-  stringCmd += "&angle_increment=" + angle_increment;
-  stringCmd += "&scan_time=" + scan_time;
-  stringCmd += "&range_max=" + range_max;
-  stringCmd += "&range_min=" + range_min;
-  stringCmd += "&ranges=[";
-  for(int i = 0; i < ranges.size(); i++){
-    stringCmd += "\"" + ranges[i] + "\"";
-    if (i < ranges.size() - 1) {
-      stringCmd += ",";
-    }
-  }
-  stringCmd += "]";
-  return stringCmd;
-}
-
-void AmclNode::laserReceivedHelper(const sensor_msgs::LaserScanConstPtr& laser_scan){
+void
+AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
+{
   last_laser_received_ts_ = ros::Time::now();
   if( map_ == NULL ) {
     return;
@@ -1405,21 +1291,6 @@ void AmclNode::laserReceivedHelper(const sensor_msgs::LaserScanConstPtr& laser_s
 
 }
 
-// REPAIR ME IN FUTURE (above function should be in here)
-void
-AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
-{
-  // ros::Time begin = ros::Time::now();
-  
-  std::string message = createLaserScanMSG(laser_scan);
-  sendData("http://localhost:3000/amcl", message);
-  
-  // ros::Duration execTime = ros::Time::now() - begin;
-  // ROS_ERROR("%f", (execTime.toSec()));
-
-  laserReceivedHelper(laser_scan);
-}
-
 double
 AmclNode::getYaw(tf::Pose& t)
 {
@@ -1457,9 +1328,14 @@ AmclNode::handleInitialPoseMessage(const geometry_msgs::PoseWithCovarianceStampe
   tf::StampedTransform tx_odom;
   try
   {
-    tf_->lookupTransform(base_frame_id_, ros::Time::now(),
-                         base_frame_id_, msg.header.stamp,
-                         global_frame_id_, tx_odom);
+    ros::Time now = ros::Time::now();
+    // wait a little for the latest tf to become available
+    tf_->waitForTransform(base_frame_id_, msg.header.stamp,
+                         base_frame_id_, now,
+                         odom_frame_id_, ros::Duration(0.5));
+    tf_->lookupTransform(base_frame_id_, msg.header.stamp,
+                         base_frame_id_, now,
+                         odom_frame_id_, tx_odom);
   }
   catch(tf::TransformException e)
   {
@@ -1474,7 +1350,7 @@ AmclNode::handleInitialPoseMessage(const geometry_msgs::PoseWithCovarianceStampe
 
   tf::Pose pose_old, pose_new;
   tf::poseMsgToTF(msg.pose.pose, pose_old);
-  pose_new = tx_odom.inverse() * pose_old;
+  pose_new = pose_old * tx_odom;
 
   // Transform into the global frame
 

@@ -56,7 +56,6 @@ add_dependencies(amcl amcl_gencfg)
 
 target_link_libraries(amcl
     amcl_sensors amcl_map amcl_pf
-    curl
     ${Boost_LIBRARIES}
     ${catkin_LIBRARIES}
 )
@@ -122,6 +121,7 @@ if(CATKIN_ENABLE_TESTING)
 
   # Tests
   add_rostest(test/set_initial_pose.xml)
+  add_rostest(test/set_initial_pose_delayed.xml)
   add_rostest(test/basic_localization_stage.xml)
   add_rostest(test/small_loop_prf.xml)
   add_rostest(test/small_loop_crazy_driving_prg.xml)
