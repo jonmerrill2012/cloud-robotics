@@ -1,8 +1,0 @@
-{
-  "name": "cloud-robotics",
-  "dependencies": {
-    "body-parser": "^1.14.2",
-    "express": "^4.13.4",
-    "roslib": "^0.17.0"
-  }
-}

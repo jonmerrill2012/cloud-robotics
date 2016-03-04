@@ -100,8 +100,7 @@ angle_diff(double a, double b)
     return(d2);
 }
 
-// static const std::string scan_topic_ = "scan";
-static const std::string scan_topic_ = "laserScanTEST";
+static const std::string scan_topic_ = "scan";
 
 class AmclNode
 {
