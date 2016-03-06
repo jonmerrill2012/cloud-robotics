@@ -1,0 +1,2 @@
+server
+-DCATKIN_DEVEL_PREFIX=/home/evan/Code/cloud-robotics/server/devel -DCMAKE_INSTALL_PREFIX=/home/evan/Code/cloud-robotics/server/install -G Unix Makefiles
