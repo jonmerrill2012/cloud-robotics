@@ -1,7 +1,0 @@
-set(_CATKIN_CURRENT_PACKAGE "server")
-set(server_MAINTAINER "evan <evan@todo.todo>")
-set(server_DEPRECATED "")
-set(server_VERSION "0.0.0")
-set(server_BUILD_DEPENDS "message_generation" "rospy" "sensor_msgs")
-set(server_RUN_DEPENDS "message_runtime" "rospy" "sensor_msgs")
-set(server_BUILDTOOL_DEPENDS "catkin")

@@ -1,4 +1,10 @@
 #!/usr/bin/env python
+#********************************
+# Test client registration with
+#   server
+#********************************
+
+
 from server.msg import CurrentClients, NewClient
 import rospy
 import array
@@ -11,7 +17,7 @@ def generateId(serverClients):
     notDone = True
     while(notDone):
         robotId = randint(0,100) % 100
-        if robotId in serverClients: 
+        if robotId in serverClients:
             print 'Id is already in use by another robot. Trying again...'
         else:
             notDone = False
@@ -25,7 +31,7 @@ def register_self():
     msg = rospy.wait_for_message('current_clients', CurrentClients)
     serverClients = list(array.array("B", msg.clientIds))
     print serverClients
-    
+
     robotId = generateId(serverClients)
     print "generatedId: %s" % robotId
 
@@ -36,7 +42,7 @@ def register_self():
     print 'published our id \'%s\' to the server' % robotId
 
     msg = rospy.wait_for_message('current_clients', CurrentClients)
-    serverClients = list(array.array("B", msg.clientIds))   
+    serverClients = list(array.array("B", msg.clientIds))
     if robotId in serverClients:
         print 'Server successfully registered me.'
     else:

@@ -1,4 +1,8 @@
 #!/usr/bin/env python
+#****************************************
+# Handles registration of clients on
+#   server side
+#****************************************
 import rospy
 from sensor_msgs.msg import LaserScan
 from server.msg import CurrentClients, NewClient
@@ -23,6 +27,7 @@ def talker():
 def registerNew(newClientMSG):
     newId = newClientMSG.id
     if newId in clientIds:
+        print "Robot with conflicting id (%s) tried to register" % newId
         return
     else:
         clientIds.append(newId)
@@ -41,7 +46,7 @@ def initialize():
 
     # Publish all of the clients that we have
     talker()
-    
+
 
 
 if __name__ == '__main__':
