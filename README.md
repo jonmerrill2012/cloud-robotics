@@ -10,6 +10,7 @@
     `roslaunch turtlebot_gazebo turtlebot_world.launch`
 
 - Start our custom AMCL handler:
+
     `cd cloud_robotics/server`
 
     `. devel/setup.bash`
