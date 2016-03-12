@@ -15,7 +15,6 @@ last_switch = None
 # Process to start AMCL
 amcl_process = None
 
-pub_location_cancel = rospy.Publisher('location_chg_cancel', String, queue_size=1)
 
 def startAmcl():
     subprocess.call(['rosrun', 'amcl', 'amcl'])
@@ -39,7 +38,6 @@ def switchAmcl(diagnostic):
     if last_switch != None:
         if (location == 1 and time.time() < last_switch + 20):
             print "Not switching from client due to unstable network"
-            pub_location_cancel.publish(String('cancel'))
             return
 
     isHere = True
@@ -59,11 +57,6 @@ def switchAmcl(diagnostic):
     teleop_proc.wait()
     print "Killed interrupt"
     last_switch = time.time()
-    
-
-def cancelLocChange(msg):
-    global isHere
-    isHere = True
 
 if __name__ == '__main__':
     if(len(sys.argv) < 2):
@@ -82,7 +75,5 @@ if __name__ == '__main__':
     rospy.init_node('amcl_' + sys.argv[1], anonymous=True)
     isHere = not location
     rospy.Subscriber('diagnostic', String, switchAmcl)
-    if location == 1:
-        rospy.Subscriber('location_chg_cancel', String, cancelLocChange)
     print "ready."
     rospy.spin()
