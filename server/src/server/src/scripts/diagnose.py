@@ -15,7 +15,7 @@ from std_msgs.msg import String
 """
 
 
-minBW = 1000000  # Set to approx 1 Mbps
+minBW = 1000  # Set to approx 1 Mbps
 thresh = 75		 # Set to 75%
 
 
@@ -35,7 +35,8 @@ def findHost():
 	else:
 		""" Remove everything but the host name """
 		out = out.strip("http://")
-		out = out.strip(":11311\n")
+		# remove port number
+		out = out[:-7]
 		return out
 		
 

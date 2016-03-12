@@ -6,15 +6,16 @@ import subprocess
 import multiprocessing
 import sys
 
+
 # Location of this program ( 1 == server, 0 == robot (local) )
 location = -1
-
 isHere = None
+last_switch = None
 
 # Process to start AMCL
 amcl_process = None
 
-last_switch = None
+pub_location_cancel = rospy.Publisher('location_chg_cancel', String, queue_size=1)
 
 def startAmcl():
     subprocess.call(['rosrun', 'amcl', 'amcl'])
@@ -36,8 +37,9 @@ def switchAmcl(diagnostic):
         return
 
     if last_switch != None:
-        if (location == 1 and time.time() < last_switch + 10):
+        if (location == 1 and time.time() < last_switch + 20):
             print "Not switching from client due to unstable network"
+            pub_location_cancel.publish(String('cancel'))
             return
 
     isHere = True
@@ -59,6 +61,10 @@ def switchAmcl(diagnostic):
     last_switch = time.time()
     
 
+def cancelLocChange(msg):
+    global isHere
+    isHere = True
+
 if __name__ == '__main__':
     if(len(sys.argv) < 2):
         print "Enter \"client\" or \"server\" as a command line argument."
@@ -71,10 +77,12 @@ if __name__ == '__main__':
         location = 1
     else:
         print "please specify either server or client"
+        sys.exit(0)
 
-    if location != -1:
-        rospy.init_node('amcl_' + sys.argv[1], anonymous=True)
-        isHere = not location
-        rospy.Subscriber('diagnostic', String, switchAmcl)
-        print "ready."
-        rospy.spin()
+    rospy.init_node('amcl_' + sys.argv[1], anonymous=True)
+    isHere = not location
+    rospy.Subscriber('diagnostic', String, switchAmcl)
+    if location == 1:
+        rospy.Subscriber('location_chg_cancel', String, cancelLocChange)
+    print "ready."
+    rospy.spin()
