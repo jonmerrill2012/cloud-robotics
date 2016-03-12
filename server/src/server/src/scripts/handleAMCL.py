@@ -68,7 +68,7 @@ if __name__ == '__main__':
 
     if location != -1:
         rospy.init_node('amcl_' + sys.argv[1], anonymous=True)
-        isHere = !location
+        isHere = not location
         rospy.Subscriber('diagnostic', String, switchAmcl)
         print "ready."
         rospy.spin()
