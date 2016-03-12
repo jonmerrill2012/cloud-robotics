@@ -9,9 +9,12 @@ import sys
 # Location of this program ( 1 == server, 0 == robot (local) )
 location = -1
 
+isHere = False
+
 # Process to start AMCL
 amcl_process = None
 
+last_switch = None
 
 def startAmcl():
     subprocess.call(['rosrun', 'amcl', 'amcl'])
@@ -20,10 +23,19 @@ def startAmcl():
 
 def switchAmcl(diagnostic):
     if int(diagnostic.data) != location:
-        print "Already there"
+        print "Signal being handled on other side"
+        isHere = False
         return
 
-    print "Starting teleop"
+    if (location == 0 and time.time() < last_switch + 10):
+        print "Not switching from client due to unstable network"
+        return
+
+    if isHere:
+        return
+
+    isHere = True
+    print "Starting interrupt"
     teleop_proc = subprocess.Popen(['rosrun', 'server', 'interruptBot.py'])
     time.sleep(3)
     
@@ -34,11 +46,12 @@ def switchAmcl(diagnostic):
     amcl_process = multiprocessing.Process(target=startAmcl)
     amcl_process.start()
 
-    print "killing teleop..."
+    print "killing interrupt..."
     teleop_proc.kill()
     teleop_proc.wait()
-    print "Killed teleop"
-
+    print "Killed interrupt"
+    last_switch = time.time()
+    
 
 if __name__ == '__main__':
     if(len(sys.argv) < 2):
@@ -55,6 +68,7 @@ if __name__ == '__main__':
 
     if location != -1:
         rospy.init_node('amcl_' + sys.argv[1], anonymous=True)
+        isHere = !location
         rospy.Subscriber('diagnostic', String, switchAmcl)
         print "ready."
         rospy.spin()
