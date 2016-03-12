@@ -5,10 +5,14 @@ project(server)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
+  genmsg
+  actionlib_msgs
+  actionlib
   rospy
   sensor_msgs
   geometry_msgs
   message_generation
+  move_base_msgs
 )
 
 ## System dependencies are found with CMake's conventions
@@ -47,7 +51,6 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate messages in the 'msg' folder
 add_message_files(
   FILES
-  ComputationLocation.msg
   CurrentClients.msg
   NewClient.msg
 )
@@ -70,7 +73,10 @@ add_message_files(
 generate_messages(
   DEPENDENCIES
   sensor_msgs
+  std_msgs
   geometry_msgs
+  actionlib_msgs
+  move_base_msgs
 )
 
 ################################################
@@ -105,7 +111,7 @@ generate_messages(
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES server
-  CATKIN_DEPENDS rospy sensor_msgs geometry_msgs message_runtime
+  CATKIN_DEPENDS rospy std_msgs sensor_msgs geometry_msgs move_base_msgs actionlib_msgs message_runtime
 #  DEPENDS system_lib
 )
 

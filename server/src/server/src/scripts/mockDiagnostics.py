@@ -1,16 +1,16 @@
 #!/usr/bin/env python
 import rospy
-from server.msg import ComputationLocation
+from std_msgs.msg import String
 
 
 def getUserInput():
     disp = 'Choose the computation location (s for server, l for local)'
-    pub =  rospy.Publisher('diagnostic', ComputationLocation, queue_size=10)
-    locationDict = {'l' : 0, 's' : 1}
+    pub =  rospy.Publisher('diagnostic', String, queue_size=10)
+    locationDict = {'l' : '0', 's' : '1'}
     while(True):
         input = raw_input(disp).lower()
         if input == 'l' or input == 's':
-            msg = ComputationLocation(locationDict[input])
+            msg = String(locationDict[input])
             pub.publish(msg)
         elif input == 'q':
             return

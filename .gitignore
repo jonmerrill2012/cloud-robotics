@@ -1,5 +1,7 @@
 *.swp
 client/build/*
 client/devel/*
+server/build/*
+server/devel/*
 navigation/build/*
 navigation/devel/*
