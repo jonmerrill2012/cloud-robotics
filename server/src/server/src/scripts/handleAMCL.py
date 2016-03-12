@@ -19,13 +19,13 @@ def startAmcl():
 
 
 def switchAmcl(diagnostic):
-    if int(diagnostic.data) == location:
+    if int(diagnostic.data) != location:
         print "Already there"
         return
 
     print "Starting teleop"
     teleop_proc = subprocess.Popen(['rosrun', 'server', 'interruptBot.py'])
-    time.sleep(2.9)
+    time.sleep(3)
     
     print "Killing AMCL..."
     subprocess.call(['rosnode', 'kill', 'amcl'])
