@@ -9,7 +9,7 @@ import sys
 # Location of this program ( 1 == server, 0 == robot (local) )
 location = -1
 
-isHere = False
+isHere = None
 
 # Process to start AMCL
 amcl_process = None
@@ -22,6 +22,11 @@ def startAmcl():
 
 
 def switchAmcl(diagnostic):
+    global isHere
+    global last_switch
+    global location
+    global amcl_process
+
     if int(diagnostic.data) != location:
         print "Signal being handled on other side"
         isHere = False
@@ -30,9 +35,10 @@ def switchAmcl(diagnostic):
     if isHere:
         return
 
-    if (location == 0 and time.time() < last_switch + 10):
-        print "Not switching from client due to unstable network"
-        return
+    if last_switch != None:
+        if (location == 1 and time.time() < last_switch + 10):
+            print "Not switching from client due to unstable network"
+            return
 
     isHere = True
     print "Starting interrupt"
