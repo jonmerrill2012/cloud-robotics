@@ -27,11 +27,11 @@ def switchAmcl(diagnostic):
         isHere = False
         return
 
-    if (location == 0 and time.time() < last_switch + 10):
-        print "Not switching from client due to unstable network"
+    if isHere:
         return
 
-    if isHere:
+    if (location == 0 and time.time() < last_switch + 10):
+        print "Not switching from client due to unstable network"
         return
 
     isHere = True
