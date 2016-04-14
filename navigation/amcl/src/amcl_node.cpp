@@ -175,10 +175,11 @@ class AmclNode
     tf::MessageFilter<sensor_msgs::LaserScan>* laser_scan_filter_;
     ros::Subscriber initial_pose_sub_;
 
-    /*********************************************************/
-    ros::Subscriber init_pose_TEST_sub_;
-    /*********************************************************/
-    
+    /********** Cloud Robotics ************/
+    ros::Subscriber TEST_initial_pose_sub;
+    std::string computation_loc;
+    /********** Cloud Robotics ************/
+
     std::vector< AMCLLaser* > lasers_;
     std::vector< bool > lasers_update_;
     std::map< std::string, int > frame_to_laser_;
@@ -269,8 +270,8 @@ void sigintHandler(int sig)
 
 int
 main(int argc, char** argv)
-{
-  ros::init(argc, argv, "amcl");
+{ 
+  ros::init(argc, argv, "CLOUD_ROBOTICS_amcl");
   ros::NodeHandle nh;
 
   // Override default sigint handler
@@ -306,6 +307,10 @@ AmclNode::AmclNode() :
   // Grab params off the param server
   private_nh_.param("use_map_topic", use_map_topic_, false);
   private_nh_.param("first_map_only", first_map_only_, false);
+
+  /********** Cloud Robotics ************/
+  private_nh_.param("client_or_server", computation_loc, std::string(""));
+  /********** Cloud Robotics ************/
 
   double tmp;
   private_nh_.param("gui_publish_rate", tmp, -1.0);
@@ -408,10 +413,10 @@ AmclNode::AmclNode() :
                                                    this, _1));
   initial_pose_sub_ = nh_.subscribe("initialpose", 2, &AmclNode::initialPoseReceived, this);
 
-  /*****************************************************************************************/
-  init_pose_TEST_sub_ = nh_.subscribe("pose_init", 2, &AmclNode::initialPoseReceived, this);
-  /*****************************************************************************************/
-
+  /********** Cloud Robotics ************/
+  TEST_initial_pose_sub = nh_.subscribe(computation_loc + "_initial_pose", 2, &AmclNode::initialPoseReceived, this);
+  /********** Cloud Robotics ************/
+  
   if(use_map_topic_) {
     map_sub_ = nh_.subscribe("map", 1, &AmclNode::mapReceived, this);
     ROS_INFO("Subscribed to map topic.");
@@ -1310,10 +1315,8 @@ AmclNode::getYaw(tf::Pose& t)
 void
 AmclNode::initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg)
 {
-  ROS_ERROR("Received an initial pose!");
   handleInitialPoseMessage(*msg);
 }
-
 
 void
 AmclNode::handleInitialPoseMessage(const geometry_msgs::PoseWithCovarianceStamped& msg)
