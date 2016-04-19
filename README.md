@@ -1,7 +1,7 @@
 # cloud-robotics
 ## OSU Senior Capstone 2015-2016
 
-### To run navigation with computation location choice:
+### To run navigation with computation location choice (Turtlebot):
 
 - Start Gazebo:
 
@@ -16,7 +16,9 @@
     `. devel/setup.bash`
     
     `rosrun server handleAMCL.py client`
-    
+ 
+- New terminal:
+
     `cd cloud_robotics/server`
     
     `. devel/setup.bash`
@@ -36,11 +38,11 @@
 ### Now, everything should be running as usual.
 #### To see our work in action:
 - In the terminal that mockDiagnostics.py was run in, type: `s`
---* This causes the AMCL handler to kill the current instance of AMCL
+    - This causes the AMCL handler to kill the current instance of AMCL
     (started by the AMCL demo), and then start a new instance of it.
---* This new AMCL instance is initialized using the last known pose of
+    - This new AMCL instance is initialized using the last known pose of
     the robot, as published by the previous instance of AMCL.
---* Some delay/disruption is noticable in the simulator, but overall,
+    - Some delay/disruption is noticable in the simulator, but overall,
     it works well!
 
 \* NOTE: Don't forget to use our custom AMCL code:

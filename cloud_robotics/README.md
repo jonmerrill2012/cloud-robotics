@@ -1,7 +1,24 @@
 # cloud-robotics
 ## OSU Senior Capstone 2015-2016
 
-### To run navigation with computation location choice:
+### To run PR2 simulations (not totally functional yet):
+
+- Open 3 terminal windows, navigate to `cloud_robotics`
+    - Source the project for each terminal window
+
+Terminal 1:
+
+    `roslaunch launch/other/test.launch`
+
+Terminal 2:
+
+    `roslaunch pr2_navigation_global rviz_move_base.launch`
+
+Terminal 3: 
+    `roslaunch /launch/other/amclpr2.launch`
+
+
+### To run navigation with computation location choice (Turtlebot):
 
 - Open 6 terminal windows, navigate to `cloud_robotics/launch`
 
@@ -15,7 +32,7 @@
     
     `rosrun cloud_roboticis master.py`
     
-    --In a new terminal:    
+    -In a new terminal:    
 
     `cd cloud_robotics/server`
     

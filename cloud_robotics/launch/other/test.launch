@@ -1,0 +1,16 @@
+<launch>
+
+  <arg name="map_file" default="$(env TURTLEBOT_GAZEBO_MAP_FILE)" />
+  <arg name="world_file"  default="$(env TURTLEBOT_GAZEBO_WORLD_FILE)"/>
+  
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" respawn="true"/>
+
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+  </include>
+
+  <!-- Launch the PR2 in Gazebo -->
+  <include file="$(find pr2_gazebo)/launch/pr2.launch" />
+
+
+
+</launch>
