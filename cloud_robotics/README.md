@@ -7,8 +7,10 @@
     - Source the project for each terminal window
 
 Terminal 1:
-    `export ROBOT=sim`
-    `roslaunch cloud_robotics/launch/pr2/pr2_nav_tutorial.launch`
+
+`export ROBOT=sim`
+
+`roslaunch cloud_robotics/launch/pr2/pr2_nav_tutorial.launch`
 
 Terminal 2:
 
@@ -32,7 +34,9 @@ Terminal 2:
     `rosrun server mockDiagnostics.py`
     
     or to use the diagnostics tool:
+        
         - New terminal: `iperf -s` *Note: iperf must be installed
+        
         - New terminal: `rosrun server diagnose.py`  
     
 
