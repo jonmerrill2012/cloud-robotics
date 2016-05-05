@@ -31,15 +31,18 @@ def switchAmcl(diagnostic):
     global clientScanPub
     global servScanPub
 
-    if isLocal:
+    locationServer = int(diagnostic.data) 
+
+    if isLocal and locationServer:
         print "switching to server"
         servPosePub.publish(latestPose)
         activePub = servScanPub
-    else:
+        isLocal = not isLocal
+    elif not isLocal and not locationServer:
         print "switching to client"
         clientPosePub.publish(latestPose)
         activePub = clientScanPub
-    isLocal = not isLocal
+        isLocal = not isLocal
 
 
 if __name__ == '__main__':

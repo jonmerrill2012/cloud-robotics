@@ -15,8 +15,8 @@ from std_msgs.msg import String
 """
 
 
-minBW = 1000  # Set to approx 1 Mbps
-thresh = 75		 # Set to 75%
+minBW = 1000  	# Set to approx 1 Mbps
+thresh = 75		# Set to 75%
 
 
 def findHost():
@@ -62,12 +62,13 @@ def ping(host):
 
 def bw(host):
 	""" Test connection Bandwidth """
+
 	bWidth = subprocess.Popen(
 		["iperf", "-c", host, "-fk", "-t1"],
 		stdout=subprocess.PIPE,
-		stderr=subprocess.PIPE,
-    shell=True
+		stderr=subprocess.PIPE
 	)
+	
 	""" This attempts to use iperf, if it can't connect, it throws an error """
 	out, error = bWidth.communicate()
 	if error != "":

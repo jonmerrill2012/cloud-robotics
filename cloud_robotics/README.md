@@ -7,48 +7,43 @@
     - Source the project for each terminal window
 
 Terminal 1:
-
-    `roslaunch launch/other/test.launch`
+    `export ROBOT=sim`
+    `roslaunch cloud_robotics/launch/pr2/pr2_nav_tutorial.launch`
 
 Terminal 2:
 
     `roslaunch pr2_navigation_global rviz_move_base.launch`
 
-Terminal 3: 
-    `roslaunch /launch/other/amclpr2.launch`
-
 
 ### To run navigation with computation location choice (Turtlebot):
 
-- Open 6 terminal windows, navigate to `cloud_robotics/launch`
-
+- Open a lot of terminal windows
 - Start Gazebo:
 
-    `roslaunch ./turtlebot.launch`
+    `roslaunch cloud_roboticis/launch/turtlebot/turtlebot.launch`
 
-- Start our custom AMCL handler:
 
-    `. devel/setup.bash`
-    
+- Start our laser scan redirect node:
+
     `rosrun cloud_roboticis master.py`
     
     -In a new terminal:    
 
-    `cd cloud_robotics/server`
-    
-    `. devel/setup.bash`
-    
     `rosrun server mockDiagnostics.py`
+    
+    or to use the diagnostics tool:
+        - New terminal: `iperf -s` *Note: iperf must be installed
+        - New terminal: `rosrun server diagnose.py`  
     
 
 - Start the client AMCL demo:
 
-    `roslaunch ./client_amcl.launch`
+    `roslaunch cloud_robotics/launch/turtlebot/client_amcl.launch`
 
 
 - Start the server AMCL demo:
  
-    `roslaunch ./server_amcl.launch`
+    `roslaunch cloud_robotics/launch/turtlebot/server_amcl.launch`
 
  
 - Start RVIZ:
