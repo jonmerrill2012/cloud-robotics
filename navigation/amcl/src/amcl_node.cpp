@@ -47,7 +47,7 @@
 #include "geometry_msgs/PoseArray.h"
 #include "geometry_msgs/Pose.h"
 #include "nav_msgs/GetMap.h"
-#include "nav_msgs/SetMap.h"
+//***********#include "nav_msgs/SetMap.h"
 #include "std_srvs/Empty.h"
 
 // For transform support
@@ -131,8 +131,8 @@ class AmclNode
                                     std_srvs::Empty::Response& res);
     bool nomotionUpdateCallback(std_srvs::Empty::Request& req,
                                     std_srvs::Empty::Response& res);
-    bool setMapCallback(nav_msgs::SetMap::Request& req,
-                        nav_msgs::SetMap::Response& res);
+    //***************bool setMapCallback(nav_msgs::SetMap::Request& req,
+                        //****************nav_msgs::SetMap::Response& res);
 
     void laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan);
     void initialPoseReceived(const geometry_msgs::PoseWithCovarianceStampedConstPtr& msg);
@@ -221,7 +221,7 @@ class AmclNode
     ros::Publisher particlecloud_pub_;
     ros::ServiceServer global_loc_srv_;
     ros::ServiceServer nomotion_update_srv_; //to let amcl update samples without requiring motion
-    ros::ServiceServer set_map_srv_;
+    //*******************ros::ServiceServer set_map_srv_;
     ros::Subscriber initial_pose_sub_old_;
     ros::Subscriber map_sub_;
 
@@ -401,7 +401,7 @@ AmclNode::AmclNode() :
 					 &AmclNode::globalLocalizationCallback,
                                          this);
   nomotion_update_srv_= nh_.advertiseService("request_nomotion_update", &AmclNode::nomotionUpdateCallback, this);
-  set_map_srv_= nh_.advertiseService("set_map", &AmclNode::setMapCallback, this);
+  //*******************set_map_srv_= nh_.advertiseService("set_map", &AmclNode::setMapCallback, this);
 
   laser_scan_sub_ = new message_filters::Subscriber<sensor_msgs::LaserScan>(nh_, scan_topic_, 100);
   laser_scan_filter_ = 
@@ -579,6 +579,7 @@ void AmclNode::reconfigureCB(AMCLConfig &config, uint32_t level)
   initial_pose_sub_ = nh_.subscribe("initialpose", 2, &AmclNode::initialPoseReceived, this);
 }
 
+//***********************************************
 void AmclNode::savePoseToServer()
 {
   // We need to apply the last transform to the latest odom pose to get
@@ -600,6 +601,7 @@ void AmclNode::savePoseToServer()
   private_nh_.setParam("initial_cov_aa", 
                                   last_published_pose.pose.covariance[6*5+5]);
 }
+
 
 void AmclNode::updatePoseFromServer()
 {
@@ -917,7 +919,8 @@ AmclNode::nomotionUpdateCallback(std_srvs::Empty::Request& req,
 	return true;
 }
 
-bool
+//*********************************
+/*bool
 AmclNode::setMapCallback(nav_msgs::SetMap::Request& req,
                          nav_msgs::SetMap::Response& res)
 {
@@ -926,10 +929,12 @@ AmclNode::setMapCallback(nav_msgs::SetMap::Request& req,
   res.success = true;
   return true;
 }
+*/
 
 void
 AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
 {
+  ROS_ERROR("THING");
   last_laser_received_ts_ = ros::Time::now();
   if( map_ == NULL ) {
     return;

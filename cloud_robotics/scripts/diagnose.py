@@ -38,7 +38,7 @@ def findHost():
 		# remove port number
 		out = out[:-7]
 		return out
-		
+
 
 def ping(host):
 	""" Test connection Bandwidth """
@@ -65,7 +65,8 @@ def bw(host):
 	bWidth = subprocess.Popen(
 		["iperf", "-c", host, "-fk", "-t1"],
 		stdout=subprocess.PIPE,
-		stderr=subprocess.PIPE
+		stderr=subprocess.PIPE,
+    shell=True
 	)
 	""" This attempts to use iperf, if it can't connect, it throws an error """
 	out, error = bWidth.communicate()
