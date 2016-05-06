@@ -3,10 +3,11 @@ import rospy
 import psutil
 import subprocess
 import re
+import sys
 from std_msgs.msg import String
 
 """
-	Usage: rosrun cloud_robotics diagnose
+	Usage: rosrun cloud_robotics diagnose "hostname"
 
 	Server needs to be running "iperf -s -D" which puts it in daemon mode
 
@@ -17,27 +18,7 @@ from std_msgs.msg import String
 
 minBW = 1000  	# Set to approx 1 Mbps
 thresh = 75		# Set to 75%
-
-
-def findHost():
-	""" Sets the host variable to the ROS_MASTER_URI """
-	e = "echo $ROS_MASTER_URI"
-	png = subprocess.Popen(
-		e,
-		stdout=subprocess.PIPE,
-		stderr=subprocess.PIPE,
-		shell=True
-	)
-	out, error = png.communicate()
-	if error != "":
-		print error
-		return 0
-	else:
-		""" Remove everything but the host name """
-		out = out.strip("http://")
-		# remove port number
-		out = out[:-7]
-		return out
+host = sys.argv[1]  # Set host by command line argument
 
 
 def ping(host):
@@ -96,7 +77,6 @@ def publish():
 	rospy.init_node('diag', anonymous=True)
 	cpuTest = pingTest = bwTest = 1
 	count = 5
-	host = findHost()
 	while not rospy.is_shutdown():
 		if host != 0:
 			pingTest = str(ping(host))
