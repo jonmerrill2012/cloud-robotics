@@ -1,9 +1,9 @@
 <launch>
-
-  <arg name="map_file" default="$(find cloud_robotics)/maps/cloud_test_map.yaml" />
+  <include file="$(find pr2_machine)/sim.machine" />
+  <arg name="map_file" default="$(find cloud_robotics)/maps/map_2.yaml" />
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" respawn="true"/>
 
-  <arg name="world_file"  default="$(find cloud_robotics)/worlds/cloud_robotics_demo.world"/> 
+  <arg name="world_file"  default="$(find cloud_robotics)/worlds/world_2.world"/> 
   
   <!-- launch Gazebo -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">  
@@ -12,6 +12,8 @@
 
   <!-- Launch the PR2 -->
   <include file="$(find pr2_gazebo)/launch/pr2.launch" />
+  
+  <include file="$(find pr2_navigation_perception)/ground_plane.xml" />
 
   <!-- TODO: update to take proper scans -->
   <!-- launch our AMCL. NOTE: Currently just uses base_scan -->
@@ -21,7 +23,7 @@
   <include file="$(find pr2_navigation_perception)/lasers_and_filters.xml" />
 
   <!-- The navigation stack and associated parameters -->
-  <include file="$(find cloud_robotics)/launch/pr2/move_base.xml" />
+  <include file="$(find cloud_robotics)/launch/pr2/move_base.xml"/>
   <!--include file="$(find pr2_navigation_global)/move_base.xml" /-->
   
   <!-- Sets the robot's description -->

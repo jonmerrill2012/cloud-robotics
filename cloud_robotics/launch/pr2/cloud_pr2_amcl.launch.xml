@@ -6,10 +6,10 @@
   <arg name="initial_pose_a"  default="0.0"/>
   <arg name="scan_topic"      default="scan"/> 
   <arg name="amcl_node_name"  default="amcl"/>
-  <arg name="computation_loc" default=""/>
+  <arg name="computation_loc" default="client"/>
 
 
-<node pkg="amcl" type="amcl" name="$(arg amcl_node_name)"> <!--machine="c2"-->
+  <node pkg="amcl" type="amcl" name="$(arg amcl_node_name)" machine="c2">
   <remap from="scan" to="$(arg scan_topic)" />
   <!-- Cloud Robotics -->
   <param name="initial_pose_x" value="$(arg initial_pose_x)"/>
