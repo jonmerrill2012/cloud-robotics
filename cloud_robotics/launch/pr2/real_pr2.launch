@@ -1,16 +1,10 @@
 <launch>
+
   <include file="$(find pr2_machine)/sim.machine" />
   <arg name="map_file" default="$(find cloud_robotics)/maps/map_2.yaml" />
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" respawn="true"/>
 
-  <arg name="world_file"  default="$(find cloud_robotics)/worlds/world_2.world"/> 
-  
-  <!-- launch Gazebo -->
-  <include file="$(find gazebo_ros)/launch/empty_world.launch">  
-    <arg name="world_name" value="$(arg world_file)" />          
-  </include>                                                     
-
-  <!-- Launch the PR2 -->
+    <!-- Launch the PR2 -->
   <include file="$(find pr2_gazebo)/launch/pr2.launch" />
   
   <include file="$(find pr2_navigation_perception)/ground_plane.xml" />
@@ -24,10 +18,8 @@
 
   <!-- The navigation stack and associated parameters -->
   <include file="$(find cloud_robotics)/launch/pr2/move_base.xml"/>
-  <!--include file="$(find pr2_navigation_global)/move_base.xml" /-->
   
   <!-- Sets the robot's description -->
   <include file="$(find pr2_description)/robots/upload_pr2.launch" />
-
 
 </launch>

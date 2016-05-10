@@ -1,4 +1,5 @@
 <launch>
+
   <include file="$(find pr2_machine)/sim.machine" />
   <arg name="map_file" default="$(find cloud_robotics)/maps/map_2.yaml" />
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" respawn="true"/>
@@ -28,6 +29,5 @@
   
   <!-- Sets the robot's description -->
   <include file="$(find pr2_description)/robots/upload_pr2.launch" />
-
 
 </launch>
