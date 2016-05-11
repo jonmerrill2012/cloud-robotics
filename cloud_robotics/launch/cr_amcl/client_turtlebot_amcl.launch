@@ -1,20 +1,15 @@
 <launch>
-  
-  <!-- Map server -->                                                                 
-  <!--arg name="map_file" default="$(find turtlebot_gazebo)/maps/playground.yaml"/-->                   
-  <arg name="map_file" default="$(find cloud_robotics)/maps/cloud_test_map.yaml"/>                   
-  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />
 
   <!-- AMCL parameters --> 
-  <arg name="initial_pose_x" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
-  <arg name="initial_pose_y" default="0.0"/> <!-- Use 17.0 for willow's map in simulation -->
+  <arg name="initial_pose_x" default="0.0"/> 
+  <arg name="initial_pose_y" default="0.0"/> 
   <arg name="initial_pose_a" default="0.0"/>
   <arg name="amcl_node_name" default="client_amcl"/>
   <arg name="scan_topic" default="client_scan"/>
   <arg name="computation_loc" value="client"/>
   
   <!-- launch AMCL --> 
-  <include file="$(find cloud_robotics)/launch/turtlebot/amcl.launch.xml">
+  <include file="$(find cloud_robotics)/launch/cr_amcl/turtlebot_cr_amcl.launch.xml">
     <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
     <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
     <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>

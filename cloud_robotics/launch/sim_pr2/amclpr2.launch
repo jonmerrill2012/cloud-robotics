@@ -6,7 +6,7 @@
   <arg name="amcl_node_name" default="client_pr2_amcl"/>
   <arg name="computation_loc" value="client"/>
   
-  <include file="$(find cloud_robotics)/launch/cr_amcl/pr2_cr_amcl_omni.launch.xml">
+  <include file="$(find cloud_robotics)/launch/cr_amcl/pr2_cr_amcl.launch.xml">
     <arg name="amcl_node_name" value="$(arg amcl_node_name)"/>
     <arg name="scan_topic" value="$(arg scan_topic)"/>
     <arg name="computation_loc" value="$(arg computation_loc)"/>

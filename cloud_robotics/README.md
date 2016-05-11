@@ -1,22 +1,6 @@
 # cloud-robotics
 ## OSU Senior Capstone 2015-2016
 
-### To run PR2 simulations (not totally functional yet):
-
-- Open 3 terminal windows, navigate to `cloud_robotics`
-    - Source the project for each terminal window
-
-Terminal 1:
-
-`export ROBOT=sim`
-
-`roslaunch cloud_robotics/launch/pr2/pr2_nav_tutorial.launch`
-
-Terminal 2:
-
-    `roslaunch pr2_navigation_global rviz_move_base.launch`
-
-
 ### To run navigation with computation location choice (Turtlebot):
 
 - Open a lot of terminal windows
@@ -53,3 +37,21 @@ Terminal 2:
 - Start RVIZ:
 
     `roslaunch turtlebot_rviz_launchers view_navigation.launch --screen`
+
+
+### To run PR2 simulations (broken):
+
+- Open 3 terminal windows, navigate to `cloud_robotics`
+    - Source the project for each terminal window
+
+Terminal 1:
+
+`export ROBOT=sim`
+
+`roslaunch cloud_robotics/launch/pr2/pr2_nav_tutorial.launch`
+
+Terminal 2:
+
+    `roslaunch pr2_navigation_global rviz_move_base.launch`
+
+

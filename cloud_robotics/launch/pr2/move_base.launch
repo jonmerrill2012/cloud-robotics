@@ -1,0 +1,27 @@
+<launch>
+  <master auto="start"/>
+
+  <!-- Run the map server -->
+  <!--node name="map_server" pkg="map_server" type="map_server" args="$(find cloud_robotics)/maps/map_2.yaml"/-->
+  
+  <!--- Run AMCL -->
+  <include file="$(find cloud_robotics)/launch/real_pr2/amcl_omni.launch" />
+
+  <!-- move base --> 
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+   <!-- Use the dwa local planner for the PR2 -->                                        
+   <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />           
+                                                                                         
+   <!-- Load common configuration files -->                                              
+   <rosparam file="$(find pr2_navigation_config)/move_base/move_base_params.yaml" command="load" />
+   <rosparam file="$(find pr2_navigation_config)/move_base/costmap_common_params.yaml" command="load" ns="global_costmap" />
+   <rosparam file="$(find pr2_navigation_config)/move_base/costmap_common_params.yaml" command="load" ns="local_costmap" />
+   <rosparam file="$(find pr2_navigation_config)/move_base/dwa_local_planner.yaml" command="load" ns="DWAPlannerROS" />
+   <rosparam file="$(find pr2_navigation_config)/move_base/recovery_behaviors.yaml" command="load" />
+                                                                                         
+   <!-- Load global navigation specific parameters -->                                   
+   <rosparam file="$(find pr2_navigation_global)/config/local_costmap_params.yaml" command="load" />
+   <rosparam file="$(find pr2_navigation_global)/config/global_costmap_params.yaml" command="load" /> 
+ </node>
+
+</launch>

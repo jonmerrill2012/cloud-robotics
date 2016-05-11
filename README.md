@@ -1,6 +1,10 @@
 # cloud-robotics
 ## OSU Senior Capstone 2015-2016
 
+
+## See the cloud_robotics package for run instructions
+
+TODO: DELETE/MIGRATE INTO cloud_robotics package:
 ### To run navigation with computation location choice (Turtlebot):
 
 - Start Gazebo:
