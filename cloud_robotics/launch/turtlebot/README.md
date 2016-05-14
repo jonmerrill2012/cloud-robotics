@@ -1,5 +1,5 @@
 # Launching (real) Turtlebot with Cloud Robotics' AMCL
-Run scripts/ros_master_setup.bash <turtlebot's IP address> <local machine's IP address>
+Run `scripts/ros_master_setup.bash <turtlebot's IP address> <local machine's IP address>`
 
 On the Turtlebot's machine, run:
 `roslaunch cloud_turtlebot.launch`
