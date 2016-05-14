@@ -9,8 +9,8 @@ servScanPub = rospy.Publisher('server_scan', LaserScan)
 clientScanPub = rospy.Publisher('client_scan', LaserScan)
 activePub = clientScanPub
 
-servPosePub = rospy.Publisher('server_initial_pose', PoseWithCovarianceStamped)
-clientPosePub = rospy.Publisher('client_initial_pose', PoseWithCovarianceStamped)
+servPosePub = rospy.Publisher('cr_server_initial_pose', PoseWithCovarianceStamped)
+clientPosePub = rospy.Publisher('cr_client_initial_pose', PoseWithCovarianceStamped)
 
 isLocal = True
 latestPose = None
