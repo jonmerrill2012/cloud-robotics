@@ -176,7 +176,7 @@ class AmclNode
     ros::Subscriber initial_pose_sub_;
 
     /********** Cloud Robotics ************/
-    ros::Subscriber TEST_initial_pose_sub;
+    ros::Subscriber cr_initial_pose_sub;
     std::string computation_loc;
     /********** Cloud Robotics ************/
 
@@ -414,7 +414,7 @@ AmclNode::AmclNode() :
   initial_pose_sub_ = nh_.subscribe("initialpose", 2, &AmclNode::initialPoseReceived, this);
 
   /********** Cloud Robotics ************/
-  TEST_initial_pose_sub = nh_.subscribe(computation_loc + "_initial_pose", 2, &AmclNode::initialPoseReceived, this);
+  cr_initial_pose_sub = nh_.subscribe("cr_" + computation_loc + "_initial_pose", 2, &AmclNode::initialPoseReceived, this);
   /********** Cloud Robotics ************/
   
   if(use_map_topic_) {
