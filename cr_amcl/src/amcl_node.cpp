@@ -934,7 +934,6 @@ AmclNode::setMapCallback(nav_msgs::SetMap::Request& req,
 void
 AmclNode::laserReceived(const sensor_msgs::LaserScanConstPtr& laser_scan)
 {
-  ROS_ERROR("THING");
   last_laser_received_ts_ = ros::Time::now();
   if( map_ == NULL ) {
     return;
