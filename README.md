@@ -1,56 +1,40 @@
 # cloud-robotics
 ## OSU Senior Capstone 2015-2016
+For information running the Cloud Robotics project on a robot, see the wiki pages.
 
-
-## See the cloud_robotics package for run instructions
-
-TODO: DELETE/MIGRATE INTO cloud_robotics package:
 ### To run navigation with computation location choice (Turtlebot):
 
+- Open a lot of terminal windows
 - Start Gazebo:
 
-    `source /opt/ros/indigo/setup.bash`
+    `roslaunch cloud_robotics launch/turtlebot/turtlebot.launch`
 
-    `roslaunch turtlebot_gazebo turtlebot_world.launch`
 
-- Start our custom AMCL handler:
+- Start our laser scan redirect node:
 
-    `cd cloud_robotics/server`
-
-    `. devel/setup.bash`
+    `rosrun cloud_roboticis master.py`
     
-    `rosrun server handleAMCL.py client`
- 
-- New terminal:
+    -In a new terminal:    
 
-    `cd cloud_robotics/server`
-    
-    `. devel/setup.bash`
-    
     `rosrun server mockDiagnostics.py`
     
+    or to use the diagnostics tool:
+        
+        - New terminal: `iperf -s` *Note: iperf must be installed
+        
+        - New terminal: `rosrun server diagnose.py`  
+    
 
-- Start the AMCL demo:
+- Start the client AMCL demo:
 
-    `roslaunch turtlebot_gazebo amcl_demo.launch`
+    `roslaunch cloud_robotics/ aunch/turtlebot/client_amcl.launch`
+
+
+- Start the server AMCL demo:
+ 
+    `roslaunch cloud_robotics launch/turtlebot/server_amcl.launch`
+
  
 - Start RVIZ:
 
     `roslaunch turtlebot_rviz_launchers view_navigation.launch --screen`
-
-
-### Now, everything should be running as usual.
-#### To see our work in action:
-- In the terminal that mockDiagnostics.py was run in, type: `s`
-    - This causes the AMCL handler to kill the current instance of AMCL
-    (started by the AMCL demo), and then start a new instance of it.
-    - This new AMCL instance is initialized using the last known pose of
-    the robot, as published by the previous instance of AMCL.
-    - Some delay/disruption is noticable in the simulator, but overall,
-    it works well!
-
-\* NOTE: Don't forget to use our custom AMCL code:
-- `cd cloud_robotics/navigation`
-- `catkin_make` (will take a long time if this is the first time building the nav package)
-- `sudo cp devel/lib/amcl/amcl /opt/ros/indigo/lib/amcl/`
-

@@ -1,7 +1,7 @@
 <launch>
 
   <!-- Map server -->                                                                     
-  <arg name="map_file" default="$(find cloud_robotics)/maps/map_2.yaml"/>
+  <arg name="map_file" default="$(find cloud_robotics)/maps/osumap.yaml"/>
   <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />    
 
   <!-- Start Turtlebot -->                                                   

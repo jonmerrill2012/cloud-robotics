@@ -10,3 +10,11 @@ On a remote machine, run:
 
 To visualize navigation and send nav goals, run:
 `roslaunch turtlebot_rviz_launchers view_navigation.launch --screen`
+
+##Creating a Map
+Run `roslaunch cloud_robotics turtlebot_mapping.launch`
+Start RVIZ to visualize mapping: `roslaunch turtlebot_rviz_launchers view_navigation.launch`
+Drive the robot around: `roslaunch turtlebot_teleop keyboard_teleop.launch`
+
+When the map looks good, save it: `rosrun map_server map_saver -f <your map name>`
+NOTE: This creates two files, `<your map name>.yaml` and `<your map name>.png`
