@@ -9,7 +9,7 @@
   <arg name="computation_loc" value="client"/>
   
   <!-- launch AMCL --> 
-  <include file="$(find cloud_robotics)/launch/cr_amcl/turtlebot_cr_amcl.launch.xml">
+  <include file="$(find cloud_robotics)/launch/cr_amcl/includes/turtlebot_cr_amcl.launch.xml">
     <arg name="initial_pose_x" value="$(arg initial_pose_x)"/>
     <arg name="initial_pose_y" value="$(arg initial_pose_y)"/>
     <arg name="initial_pose_a" value="$(arg initial_pose_a)"/>
