@@ -2,7 +2,7 @@
 ## OSU Senior Capstone 2015-2016
 This project aims to reduce robot battery usage and decrease the robot processor load by performing calculations on a remote server. In this proof of concept, [AMCL](http://wiki.ros.org/amcl) is moved to the server to perform localization computations off-robot. The network diagnostics code will dynamically determine whether AMCL calculations should happen on the server or robot. This is based on network strength. There is also an option to manually set the computation location instead.
 
-For information on the Cloud Robotics project (such as dependencies and specific instructions), see the repository wiki. The following instructions are for running this project on a simulated turtlebot. "Robot" and "Server" are simply two different computers when simulating. 
+For information on the Cloud Robotics project (such as dependencies and specific instructions), see the repository [wiki](https://github.com/chonny24/cloud-robotics/wiki). The following instructions are for running this project on a simulated turtlebot. "Robot" and "Server" are simply two different computers when simulating. 
 
 ### Initial Setup
 See wiki for dependencies. This must be done on both Robot and Server.
