@@ -45,7 +45,7 @@ This project relies on ROS multi-machine functionality. We have provided a scrip
     `roslaunch cloud_robotics sim_turtlebot_nav.launch`
 - Start our laser scan redirect node:
 
-    `rosrun cloud_roboticis redirect.py`
+    `rosrun cloud_robotics redirect.py`
 - Start RVIZ (can be run on either robot or server):
 
     `roslaunch turtlebot_rviz_launchers view_navigation.launch --screen`
@@ -53,7 +53,7 @@ This project relies on ROS multi-machine functionality. We have provided a scrip
 ###### On Server:
 - Start the server AMCL demo:
  
-    `roslaunch cloud_robotics server_amcl.launch`
+    `roslaunch cloud_robotics server_turtlebot_amcl.launch`
 
 ###### Diagnostics:
 **Option 1**: Automatic computation location switching
@@ -63,13 +63,13 @@ This project relies on ROS multi-machine functionality. We have provided a scrip
     `iperf -s`
 - **On Robot**: Start network diagnostic node:
 
-    `rosrun cloud-robotics diagnose.py`
+    `rosrun cloud_robotics diagnose.py <server ip>`
 
 **Option 2**: Manual computation location switching
 
 - **On either Robot or Server**: Start mockDiagnostic node:
 
-    `rosrun cloud-robotics mockDiagnostics.py`
+    `rosrun cloud_robotics mockDiagnostics.py`
 
  
 ### Usage
