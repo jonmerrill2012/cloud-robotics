@@ -1,0 +1,20 @@
+<launch>
+
+  <!-- Map server -->                                                  
+  <arg name="map_file" default="$(find turtlebot_gazebo)/maps/playground.yaml"/>
+  <node name="map_server" pkg="map_server" type="map_server" args="$(arg map_file)" />    
+
+  <!-- Start Turtlebot -->                                                   
+  <include file="$(find turtlebot_bringup)/launch/minimal.launch" />
+
+  <!-- Setup sensors -->         
+  <include file="$(find turtlebot_bringup)/launch/3dsensor.launch">
+     <arg name="depth_registration" value="false"/>
+     <arg name="depth_registered_processing" value="false"/>
+  </include>         
+ 
+  <include file="$(find cloud_robotics)/launch/cr_amcl/client_turtlebot_amcl.launch" />
+                                                                                     
+  <include file="$(find turtlebot_navigation)/launch/includes/move_base.launch.xml"/>     
+                                                                                          
+</launch>

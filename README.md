@@ -1,50 +1,77 @@
 # cloud-robotics
 ## OSU Senior Capstone 2015-2016
+This project aims to reduce robot battery usage and decrease the robot processor load by performing calculations on a remote server. In this proof of concept, [AMCL](http://wiki.ros.org/amcl) is moved to the server to perform localization computations off-robot. The network diagnostics code will dynamically determine whether AMCL calculations should happen on the server or robot. This is based on network strength. There is also an option to manually set the computation location instead.
 
-### To run navigation with computation location choice:
+For information on the Cloud Robotics project (such as dependencies and specific instructions), see the repository wiki. The following instructions are for running this project on a simulated turtlebot. "Robot" and "Server" are simply two different computers when simulating. 
 
-- Start Gazebo:
+### Initial Setup
+See wiki for dependencies. This must be done on both Robot and Server.
 
-    `source /opt/ros/indigo/setup.bash`
+- `mkdir cloud-robotics`
+- `cd cloud-robotics`
+- `git clone https://github.com/chonny24/cloud-robotics.git`
+- `mv cloud-robotics src`
+- `cd src`
+- `catkin_init_workspace`
+- `cd ..`
+- `catkin_make`
 
-    `roslaunch turtlebot_gazebo turtlebot_world.launch`
+### ROS Remote Master Set Up
+This project relies on ROS multi-machine functionality. We have provided a script to easily configure remote machines. This must be done for each terminal.
+###### On Robot:
+- navigate to src/cloud-robotics/scripts
 
-- Start our custom AMCL handler:
+- determine ip address: 
 
-    `cd cloud_robotics/server`
+    `ifconfig`
+- `bash ros_master_setup.bash <robot ip> <robot ip>`
 
-    `. devel/setup.bash`
+###### On Server:
+- navigate to src/cloud-robotics/scripts
+
+- determine ip address: 
+
+    `ifconfig`
+- `bash ros_master_setup.bash <robot ip> <server ip>`
+
+### Running the Project
+- Source workspace (for each open terminal): 
     
-    `rosrun server handleAMCL.py client`
-    
-    `cd cloud_robotics/server`
-    
-    `. devel/setup.bash`
-    
-    `rosrun server mockDiagnostics.py`
-    
+    `source devel/setup.bash`
+###### On Robot:
 
-- Start the AMCL demo:
+- Start Gazebo: 
+    
+    `roslaunch cloud_robotics sim_turtlebot_nav.launch`
+- Start our laser scan redirect node:
 
-    `roslaunch turtlebot_gazebo amcl_demo.launch`
- 
-- Start RVIZ:
+    `rosrun cloud_robotics redirect.py`
+- Start RVIZ (can be run on either robot or server):
 
     `roslaunch turtlebot_rviz_launchers view_navigation.launch --screen`
 
+###### On Server:
+- Start the server AMCL demo:
+ 
+    `roslaunch cloud_robotics server_turtlebot_amcl.launch`
 
-### Now, everything should be running as usual.
-#### To see our work in action:
-- In the terminal that mockDiagnostics.py was run in, type: `s`
---* This causes the AMCL handler to kill the current instance of AMCL
-    (started by the AMCL demo), and then start a new instance of it.
---* This new AMCL instance is initialized using the last known pose of
-    the robot, as published by the previous instance of AMCL.
---* Some delay/disruption is noticable in the simulator, but overall,
-    it works well!
+###### Diagnostics:
+**Option 1**: Automatic computation location switching
 
-\* NOTE: Don't forget to use our custom AMCL code:
-- `cd cloud_robotics/navigation`
-- `catkin_make` (will take a long time if this is the first time building the nav package)
-- `sudo cp devel/lib/amcl/amcl /opt/ros/indigo/lib/amcl/`
+- **On Server**: Start iperf:
 
+    `iperf -s`
+- **On Robot**: Start network diagnostic node:
+
+    `rosrun cloud_robotics diagnose.py <server ip>`
+
+**Option 2**: Manual computation location switching
+
+- **On either Robot or Server**: Start mockDiagnostic node:
+
+    `rosrun cloud_robotics mockDiagnostics.py`
+
+ 
+### Usage
+- In RVIZ, give the turtlebot navigation goals by clicking the 2D Nav Goal button to move the robot around.
+- **For manual computation location switching**: In mockDiagnostics terminal, enter `s` to switch computation to the server; `r` to switch to robot; `q` to quit.
