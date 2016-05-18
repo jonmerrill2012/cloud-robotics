@@ -1,6 +1,6 @@
 # cloud-robotics
 ## OSU Senior Capstone 2015-2016
-For information running the Cloud Robotics project on a robot, see the wiki pages.
+For information running the Cloud Robotics project on a robot, see the repository wiki.
 
 ### To run navigation with computation location choice (Turtlebot):
 
