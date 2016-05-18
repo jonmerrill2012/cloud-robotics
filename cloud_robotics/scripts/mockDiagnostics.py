@@ -4,12 +4,12 @@ from std_msgs.msg import String
 
 
 def getUserInput():
-    disp = 'Choose the computation location (s for server, l for local)'
+    disp = 'Choose the computation location (s for server, r for robot)'
     pub =  rospy.Publisher('diagnostic', String, queue_size=10)
-    locationDict = {'l' : '0', 's' : '1'}
+    locationDict = {'r' : '0', 's' : '1'}
     while(True):
         input = raw_input(disp).lower()
-        if input == 'l' or input == 's':
+        if input == 'r' or input == 's':
             msg = String(locationDict[input])
             pub.publish(msg)
         elif input == 'q':
